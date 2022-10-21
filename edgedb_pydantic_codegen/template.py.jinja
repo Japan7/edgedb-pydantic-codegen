@@ -1,0 +1,94 @@
+import orjson
+from edgedb.abstract import AsyncIOExecutor
+from pydantic import BaseModel
+
+{% if enums | length > 0 %}
+from enum import Enum
+{% endif %}
+
+{% for import in extra_imports %}
+{{import}}
+{% endfor %}
+
+EDGEQL_QUERY = """
+{{query}}
+"""
+
+{% for literal in literals %}
+{{literal.alias}} = Literal[
+    {% for value in literal.values %}
+    '{{value}}',
+    {% endfor %}
+]
+{% endfor %}
+
+{% for enum in enums %}
+class {{enum.name}}(str, Enum):
+    {%- for value in enum.members %}
+    {{value}} = "{{value}}"
+    {%- endfor %}
+{% endfor %}
+
+{% for model in models | reverse %}
+class {{model.name}}(BaseModel):
+    {% for field in model.fields -%}
+    {{field.name}}:
+    {%- if field.optional -%}
+    {{field.type_str}} | None
+    {%- else -%}
+    {{field.type_str}}
+    {%- endif %}
+    {% endfor %}
+{% endfor %}
+
+async def {{stem}} (
+    executor: AsyncIOExecutor,
+    {% if args | length > 0  %}
+    *,
+    {% for arg in args %}
+    {{arg.name}}:
+    {%- if arg.optional -%}
+    {{arg.type_str}} | None = None
+    {%- else -%}
+    {{arg.type_str}}
+    {%- endif -%}
+    ,
+    {% endfor %}
+    {% endif %}
+) ->
+{%- if return_cardinality == 'NO_RESULT' -%}
+None
+{%- elif return_cardinality == 'AT_MOST_ONE' -%}
+{{return_model.name}} | None
+{%- elif return_cardinality == 'ONE' -%}
+{{return_model.name}}
+{%- elif return_cardinality == 'MANY' -%}
+list[{{return_model.name}}] {# | None #}
+{%- elif return_cardinality == 'AT_LEAST_ONE' -%}
+list[{{return_model.name}}]
+{%- endif -%}:
+    resp = await executor.query_
+    {%- if (return_cardinality == 'NO_RESULT') or (return_cardinality == 'AT_MOST_ONE') or (return_cardinality == 'ONE') -%}
+    single_
+    {%- endif -%}
+    json(EDGEQL_QUERY,
+        {% for arg in args %}
+        {% if arg.is_json %}
+        {{arg.name}} = orjson.dumps({{arg.name}}).decode(),
+        {% else %}
+        {{arg.name}} = {{arg.name}},
+        {% endif %}
+        {% endfor %}
+    )
+    json = orjson.loads(resp)
+    {%- if return_cardinality == 'NO_RESULT' %}
+    assert json is None
+    {% elif return_cardinality == 'AT_MOST_ONE' %}
+    return {{return_model.name}}.construct(**json) if json is not None else None
+    {% elif return_cardinality == 'ONE' %}
+    return {{return_model.name}}.construct(**json)
+    {% elif return_cardinality == 'MANY' %}
+    return [{{return_model.name}}.construct(**r) for r in json]
+    {% elif return_cardinality == 'AT_LEAST_ONE' %}
+    return [{{return_model.name}}.construct(**r) for r in json]
+    {% endif %}
