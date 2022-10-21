@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "edgedb-pydantic-codegen"
+version = "0.1.0"
+description = ""
+authors = ["NextFire <git@yuru.moe>"]
+readme = "README.md"
+packages = [{include = "edgedb_pydantic_codegen"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
