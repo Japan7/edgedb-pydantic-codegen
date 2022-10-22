@@ -21,10 +21,11 @@ where `<directory>` contains your `*.edgeql` queries.
 ## Generated code example
 
 ```py
+import asyncio
 from enum import Enum
 
 import orjson
-from edgedb.abstract import AsyncIOExecutor
+from edgedb import AsyncIOExecutor
 from pydantic import BaseModel
 
 EDGEQL_QUERY = """
@@ -79,6 +80,10 @@ async def player_add_coins(
         moecoins=moecoins,
         blood_shards=blood_shards,
     )
-    json = orjson.loads(resp)
-    return PlayerAddCoinsResult.construct(**json) if json is not None else None
+    json = await asyncio.to_thread(orjson.loads, resp)
+    return (
+        (await asyncio.to_thread(PlayerAddCoinsResult.parse_obj, json))
+        if json is not None
+        else None
+    )
 ```
