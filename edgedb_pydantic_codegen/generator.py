@@ -87,8 +87,8 @@ class ProcessData:
     models: dict[str, EdgeQLModel] = dc_field(default_factory=dict)
     args: dict[str, EdgeQLArgument] = dc_field(default_factory=dict)
     optional_args: dict[str, EdgeQLArgument] = dc_field(default_factory=dict)
-    return_model: EdgeQLModel | None = None
-    return_cardinality: str = Cardinality.NO_RESULT.name
+    return_type: str = 'None'
+    return_single: bool = True
 
 
 class Generator:
@@ -118,9 +118,23 @@ class Generator:
                 return_model_name,
                 describe_result.output_type,  # type: ignore
                 process_data)
-            process_data.return_model = return_model
 
-        process_data.return_cardinality = describe_result.output_cardinality.name
+            return_cardinality = describe_result.output_cardinality
+            if return_cardinality is Cardinality.NO_RESULT:
+                process_data.return_type = 'None'
+                process_data.return_single = True
+            elif return_cardinality is Cardinality.AT_MOST_ONE:
+                process_data.return_type = f"{return_model.name} | None"
+                process_data.return_single = True
+            elif return_cardinality is Cardinality.ONE:
+                process_data.return_type = f"{return_model.name}"
+                process_data.return_single = True
+            elif return_cardinality is Cardinality.MANY:
+                process_data.return_type = f"list[{return_model.name}]"
+                process_data.return_single = False
+            elif return_cardinality is Cardinality.AT_LEAST_ONE:
+                process_data.return_type = f"list[{return_model.name}]"
+                process_data.return_single = False
 
         if describe_result.input_type is not None:
             for name, arg in describe_result.input_type.elements.items(  # type: ignore
@@ -154,8 +168,8 @@ class Generator:
             models=process_data.models.values(),
             args=(list(process_data.args.values()) +
                   list(process_data.optional_args.values())),
-            return_model=process_data.return_model,
-            return_cardinality=process_data.return_cardinality)
+            return_type=process_data.return_type,
+            return_single=process_data.return_single)
 
         imports_fixed = isort.code(
             autoflake.fix_code(rendered, remove_all_unused_imports=True))
