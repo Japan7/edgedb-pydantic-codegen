@@ -1,12 +1,9 @@
 import asyncio
+from enum import Enum
 
 import orjson
 from edgedb import AsyncIOExecutor
-from pydantic import BaseModel
-
-{% if enums | length > 0 %}
-from enum import Enum
-{% endif %}
+from pydantic import BaseModel, parse_raw_as
 
 {% for import in extra_imports %}
 {{import}}
@@ -82,15 +79,14 @@ list[{{return_model.name}}]
         {% endif %}
         {% endfor %}
     )
-    json = await asyncio.to_thread(orjson.loads, resp)
     {%- if return_cardinality == 'NO_RESULT' %}
-    assert json is None
+    assert resp == 'null'
     {% elif return_cardinality == 'AT_MOST_ONE' %}
-    return (await asyncio.to_thread({{return_model.name}}.parse_obj, json)) if json is not None else None
+    return await asyncio.to_thread(parse_raw_as, {{return_model.name}} | None, resp, json_loads=orjson.loads)
     {% elif return_cardinality == 'ONE' %}
-    return await asyncio.to_thread({{return_model.name}}.parse_obj, json)
+    return await asyncio.to_thread(parse_raw_as, {{return_model.name}}, resp, json_loads=orjson.loads)
     {% elif return_cardinality == 'MANY' %}
-    return await asyncio.gather(*(asyncio.to_thread({{return_model.name}}.parse_obj, r) for r in json))
+    return await asyncio.to_thread(parse_raw_as, list[{{return_model.name}}], resp, json_loads=orjson.loads)
     {% elif return_cardinality == 'AT_LEAST_ONE' %}
-    return await asyncio.gather(*(asyncio.to_thread({{return_model.name}}.parse_obj, r) for r in json))
+    return await asyncio.to_thread(parse_raw_as, list[{{return_model.name}}], resp, json_loads=orjson.loads)
     {% endif %}
