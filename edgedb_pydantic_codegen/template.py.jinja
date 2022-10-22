@@ -84,11 +84,11 @@ list[{{return_model.name}}]
     {%- if return_cardinality == 'NO_RESULT' %}
     assert json is None
     {% elif return_cardinality == 'AT_MOST_ONE' %}
-    return {{return_model.name}}.construct(**json) if json is not None else None
+    return {{return_model.name}}.parse_obj(json) if json is not None else None
     {% elif return_cardinality == 'ONE' %}
-    return {{return_model.name}}.construct(**json)
+    return {{return_model.name}}.parse_obj(json)
     {% elif return_cardinality == 'MANY' %}
-    return [{{return_model.name}}.construct(**r) for r in json]
+    return [{{return_model.name}}.parse_obj(r) for r in json]
     {% elif return_cardinality == 'AT_LEAST_ONE' %}
-    return [{{return_model.name}}.construct(**r) for r in json]
+    return [{{return_model.name}}.parse_obj(r) for r in json]
     {% endif %}
