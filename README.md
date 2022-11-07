@@ -29,7 +29,7 @@ import orjson
 from edgedb import AsyncIOExecutor
 from pydantic import BaseModel, parse_raw_as
 
-EDGEQL_QUERY = """
+EDGEQL_QUERY = r"""
 with
   discord_id := <int64>$discord_id,
   moecoins := <optional int32>$moecoins,

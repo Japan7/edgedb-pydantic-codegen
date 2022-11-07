@@ -21,7 +21,7 @@ TYPE_MAPPING = {
     "std::bigint": "int",
     "std::bool": "bool",
     "std::uuid": "UUID",
-    "std::bytes": "bytes",
+    "std::bytes": "str",
     "std::decimal": "Decimal",
     "std::datetime": "datetime",
     "std::duration": "timedelta",
@@ -29,10 +29,6 @@ TYPE_MAPPING = {
     "cal::local_time": "time",
     "cal::local_datetime": "datetime",
     "std::json": "Any",
-}
-
-TYPE_VALIDATORS = {
-    "std::bytes": "base64",
 }
 
 
@@ -59,7 +55,6 @@ class EdgeQLModelField:
     name: str
     type_str: str
     optional: bool
-    validator: str | None
 
 
 @dataclass
@@ -127,19 +122,19 @@ class Generator:
         if describe_result.input_type is not None:
             for name, arg in describe_result.input_type.elements.items(  # type: ignore
             ):
-                type_str, _ = self.parse_type(name,
-                                              arg.type,
-                                              snake_to_camel(file.stem),
-                                              process_data,
-                                              prefer_literal=True)
+                type_str = self.parse_type(name,
+                                           arg.type,
+                                           snake_to_camel(file.stem),
+                                           process_data,
+                                           prefer_literal=True)
                 is_json = (type_str == 'Any')
                 if arg.cardinality in (Cardinality.AT_MOST_ONE,
                                        Cardinality.MANY):
                     process_data.optional_args[name] = EdgeQLArgument(
-                        name, type_str, True, None, is_json)
+                        name, type_str, True, is_json)
                 else:
                     process_data.args[name] = EdgeQLArgument(
-                        name, type_str, False, None, is_json)
+                        name, type_str, False, is_json)
 
         self.save(file, process_data)
 
@@ -173,14 +168,12 @@ class Generator:
                    type: describe.AnyType,
                    parent_model_name: str,
                    process_data: ProcessData,
-                   prefer_literal: bool = False) -> tuple[str, str | None]:
+                   prefer_literal: bool = False) -> str:
         type_str = None
-        validator = None
 
         if isinstance(type, describe.BaseScalarType):
             assert type.name is not None
             type_str = TYPE_MAPPING.get(type.name, 'Any')
-            validator = TYPE_VALIDATORS.get(type.name, None)
 
         elif isinstance(type, describe.EnumType):
             if not prefer_literal and type.name is not None:  # an enum present in the schema
@@ -207,17 +200,17 @@ class Generator:
             type_str = model_name
 
         elif isinstance(type, describe.ArrayType):
-            element_type_str, _ = cls.parse_type(name,
-                                                 type.element_type,
-                                                 parent_model_name,
-                                                 process_data,
-                                                 prefer_literal=prefer_literal)
+            element_type_str = cls.parse_type(name,
+                                              type.element_type,
+                                              parent_model_name,
+                                              process_data,
+                                              prefer_literal=prefer_literal)
             type_str = f"list[{element_type_str}]"
 
         if type_str is None:
             raise ValueError(f"Unknown type: {type}")
 
-        return type_str, validator
+        return type_str
 
     @classmethod
     def parse_model(cls,
@@ -230,16 +223,15 @@ class Generator:
 
         fields: dict[str, EdgeQLModelField] = {}
         for field_name, field in type.elements.items():
-            field_type, validator = cls.parse_type(
-                field_name,
-                field.type,
-                model_name,
-                process_data,
-                prefer_literal=prefer_literal)
+            field_type = cls.parse_type(field_name,
+                                        field.type,
+                                        model_name,
+                                        process_data,
+                                        prefer_literal=prefer_literal)
             is_optional = (field.is_implicit or
                            field.cardinality is Cardinality.AT_MOST_ONE)
             fields[field_name] = EdgeQLModelField(field_name, field_type,
-                                                  is_optional, validator)
+                                                  is_optional)
 
         if 'id' in fields:
             if len(fields) == 1:

@@ -48,16 +48,6 @@ class {{model.name}}(BaseModel):
     {{field.type_str}}
     {%- endif %}
     {% endfor %}
-
-    {% for field in model.fields %}
-    {% if field.validator is not none %}
-    @validator("{{field.name}}", pre=True)
-    def {{field.name}}_validator(cls, v):
-        {% if field.validator == 'base64' -%}
-        return b64decode(v) if isinstance(v, str) else v
-        {% endif %}
-    {% endif %}
-    {% endfor %}
 {% endfor %}
 
 async def {{stem}} (
