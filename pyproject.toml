@@ -7,7 +7,7 @@ readme = "README.md"
 packages = [{include = "edgedb_pydantic_codegen"}]
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = "^3.11"
 edgedb = "^1.0.0"
 pydantic = "^1.10.2"
 orjson = "^3.8.0"
