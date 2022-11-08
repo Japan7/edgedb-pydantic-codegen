@@ -14,7 +14,7 @@ from datetime import time
 from typing import Any
 
 from typing import Literal
-from enum import Enum
+from enum import StrEnum
 
 from pydantic import validator
 from base64 import b64decode
@@ -32,7 +32,7 @@ EDGEQL_QUERY = r"""
 {% endfor %}
 
 {% for enum in enums %}
-class {{enum.name}}(str, Enum):
+class {{enum.name}}(StrEnum):
     {%- for value in enum.members %}
     {{value}} = "{{value}}"
     {%- endfor %}

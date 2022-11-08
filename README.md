@@ -22,7 +22,7 @@ where `<directory>` contains your `*.edgeql` queries.
 
 ```py
 import asyncio
-from enum import Enum
+from enum import StrEnum
 from typing import cast
 
 import orjson
@@ -36,7 +36,7 @@ with
   blood_shards := <optional int32>$blood_shards,
   updated := (
     update waicolle::Player
-    filter .user.discord_id = discord_id
+    filter .client = global client and .user.discord_id = discord_id
     set {
       moecoins := .moecoins + (moecoins ?? 0),
       blood_shards := .blood_shards + (blood_shards ?? 0),
@@ -46,12 +46,15 @@ select updated {
   game_mode,
   moecoins,
   blood_shards,
-  user: { discord_id },
+  user: {
+    discord_id,
+    discord_id_str,
+  },
 }
 """
 
 
-class WaicolleGameMode(str, Enum):
+class WaicolleGameMode(StrEnum):
     WAIFU = "WAIFU"
     HUSBANDO = "HUSBANDO"
     ALL = "ALL"
@@ -59,6 +62,7 @@ class WaicolleGameMode(str, Enum):
 
 class PlayerAddCoinsResultUser(BaseModel):
     discord_id: int
+    discord_id_str: str
 
 
 class PlayerAddCoinsResult(BaseModel):
