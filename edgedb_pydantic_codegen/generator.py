@@ -55,6 +55,7 @@ class EdgeQLModelField:
     name: str
     type_str: str
     optional: bool
+    alias: str | None
 
 
 @dataclass
@@ -131,10 +132,10 @@ class Generator:
                 if arg.cardinality in (Cardinality.AT_MOST_ONE,
                                        Cardinality.MANY):
                     process_data.optional_args[name] = EdgeQLArgument(
-                        name, type_str, True, is_json)
+                        name, type_str, True, None, is_json)
                 else:
                     process_data.args[name] = EdgeQLArgument(
-                        name, type_str, False, is_json)
+                        name, type_str, False, None, is_json)
 
         self.save(file, process_data)
 
@@ -223,6 +224,11 @@ class Generator:
 
         fields: dict[str, EdgeQLModelField] = {}
         for field_name, field in type.elements.items():
+            # handle link props
+            alias = None
+            if field_name.startswith('@'):
+                alias = field_name
+                field_name = f"link_{field_name[1:]}"
             field_type = cls.parse_type(field_name,
                                         field.type,
                                         model_name,
@@ -231,7 +237,7 @@ class Generator:
             is_optional = (field.is_implicit or
                            field.cardinality is Cardinality.AT_MOST_ONE)
             fields[field_name] = EdgeQLModelField(field_name, field_type,
-                                                  is_optional)
+                                                  is_optional, alias)
 
         if 'id' in fields:
             if len(fields) == 1:

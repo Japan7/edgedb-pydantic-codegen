@@ -3,7 +3,7 @@ from typing import cast
 
 import orjson
 from edgedb import AsyncIOExecutor
-from pydantic import BaseModel, parse_raw_as
+from pydantic import BaseModel, Field, parse_raw_as
 
 from uuid import UUID
 from decimal import Decimal
@@ -46,6 +46,9 @@ class {{model.name}}(BaseModel):
     {{field.type_str}} | None
     {%- else -%}
     {{field.type_str}}
+    {%- endif %}
+    {%- if field.alias -%}
+    = Field(alias="{{field.alias}}")
     {%- endif %}
     {% endfor %}
 {% endfor %}
