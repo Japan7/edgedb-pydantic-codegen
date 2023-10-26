@@ -1,15 +1,17 @@
+import os
 import re
+import subprocess
 from dataclasses import dataclass
 from dataclasses import field as dc_field
 from pathlib import Path
 
 import autoflake
-import black
 import edgedb
 import isort
 from edgedb import describe
 from edgedb.enums import Cardinality
 from jinja2 import Environment, FileSystemLoader
+from ruff.__main__ import find_ruff_bin
 
 TYPE_MAPPING = {
     "std::str": "str",
@@ -156,12 +158,16 @@ class Generator:
 
         imports_fixed = isort.code(
             autoflake.fix_code(rendered, remove_all_unused_imports=True))
-        formatted = black.format_file_contents(imports_fixed,
-                                               fast=False,
-                                               mode=black.FileMode())
 
-        with file.with_suffix('.py').open('w') as f:
-            f.write(formatted)
+        path = file.with_suffix('.py')
+        with path.open('w') as f:
+            f.write(imports_fixed)
+
+        ruff = find_ruff_bin()
+        completed_process = subprocess.run([os.fsdecode(ruff), 'format', path.absolute()])
+        if completed_process.returncode != 0:
+            raise RuntimeError('Ruff failed to format the generated code')
+
 
     @classmethod
     def parse_type(cls,
