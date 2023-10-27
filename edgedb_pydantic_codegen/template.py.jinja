@@ -1,6 +1,3 @@
-import asyncio
-from typing import cast
-
 import orjson
 from edgedb import AsyncIOExecutor
 from pydantic import BaseModel, Field, TypeAdapter
@@ -15,9 +12,6 @@ from typing import Any
 
 from typing import Literal
 from enum import StrEnum
-
-from pydantic import validator
-from base64 import b64decode
 
 EDGEQL_QUERY = r"""
 {{query}}
