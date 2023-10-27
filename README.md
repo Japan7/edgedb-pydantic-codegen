@@ -21,13 +21,10 @@ where `<directory>` contains your `*.edgeql` queries.
 ## Generated code example
 
 ```py
-import asyncio
 from enum import StrEnum
-from typing import cast
 
-import orjson
 from edgedb import AsyncIOExecutor
-from pydantic import BaseModel, parse_raw_as
+from pydantic import BaseModel, TypeAdapter
 
 EDGEQL_QUERY = r"""
 with
@@ -85,8 +82,5 @@ async def player_add_coins(
         moecoins=moecoins,
         blood_shards=blood_shards,
     )
-    parsed = await asyncio.to_thread(
-        parse_raw_as, PlayerAddCoinsResult | None, resp, json_loads=orjson.loads
-    )
-    return cast(PlayerAddCoinsResult | None, parsed)
+    return TypeAdapter(PlayerAddCoinsResult | None).validate_json(resp, strict=False)
 ```

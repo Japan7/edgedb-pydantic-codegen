@@ -3,7 +3,7 @@ from typing import cast
 
 import orjson
 from edgedb import AsyncIOExecutor
-from pydantic import BaseModel, Field, parse_raw_as
+from pydantic import BaseModel, Field, TypeAdapter
 
 from uuid import UUID
 from decimal import Decimal
@@ -84,6 +84,5 @@ async def {{stem}} (
     {%- if return_type == 'None' %}
     assert resp == "null"
     {% else %}
-    parsed = await asyncio.to_thread(parse_raw_as, {{return_type}}, resp, json_loads=orjson.loads)
-    return cast({{return_type}}, parsed)
+    return TypeAdapter({{return_type}}).validate_json(resp, strict=False)
     {% endif %}
