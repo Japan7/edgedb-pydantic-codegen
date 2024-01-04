@@ -3,7 +3,9 @@ name = "edgedb-pydantic-codegen"
 version = "0.1.0"
 description = ""
 authors = ["NextFire <git@yuru.moe>"]
+license = "MIT"
 readme = "README.md"
+repository = "https://github.com/Japan7/edgedb-pydantic-codegen"
 
 [tool.poetry.scripts]
 edgedb-pydantic-codegen = "edgedb_pydantic_codegen.__main__:cli"
