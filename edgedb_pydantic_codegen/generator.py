@@ -187,7 +187,11 @@ class Generator:
     ) -> str:
         type_str = None
 
-        if isinstance(type, describe.BaseScalarType):
+        if isinstance(type, describe.ScalarType):
+            assert type.base_type.name is not None
+            type_str = TYPE_MAPPING.get(type.base_type.name, "Any")
+
+        elif isinstance(type, describe.BaseScalarType):
             assert type.name is not None
             type_str = TYPE_MAPPING.get(type.name, "Any")
 
