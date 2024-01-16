@@ -4,16 +4,16 @@ This library generates Python typesafe code for EdgeQL queries with [Pydantic](h
 
 ## Install
 
-```
-pip install git+https://github.com/Japan7/edgedb-pydantic-codegen.git
+```sh
+pip install edgedb-pydantic-codegen
 ```
 
 ## Usage
 
 In an EdgeDB initialized project run
 
-```
-python3 -m edgedb_pydantic_codegen <directory>
+```sh
+edgedb_pydantic_codegen <directory>
 ```
 
 where `<directory>` contains your `*.edgeql` queries.
