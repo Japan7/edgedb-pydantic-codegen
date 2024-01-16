@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "edgedb-pydantic-codegen"
-version = "2024.01.0-dev"
+version = "2024.01.1-dev"
 description = ""
 authors = ["NextFire <git@yuru.moe>"]
 license = "MIT"
