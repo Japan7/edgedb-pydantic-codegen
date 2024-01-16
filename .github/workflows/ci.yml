@@ -54,6 +54,7 @@ jobs:
           POETRY_PYPI_TOKEN_PYPI: ${{ secrets.POETRY_PYPI_TOKEN_PYPI }}
       - uses: ncipollo/release-action@v1
         with:
+          generateReleaseNotes: true
           artifacts: dist/*
       - uses: actions/upload-artifact@v4
         if: always()
