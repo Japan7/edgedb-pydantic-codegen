@@ -13,7 +13,7 @@ pip install edgedb-pydantic-codegen
 In an EdgeDB initialized project run
 
 ```sh
-edgedb_pydantic_codegen <directory>
+edgedb-pydantic-codegen <directory>
 ```
 
 where `<directory>` contains your `*.edgeql` queries.
