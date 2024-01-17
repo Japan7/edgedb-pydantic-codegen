@@ -1,3 +1,4 @@
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 import edgedb
@@ -28,10 +29,15 @@ class Generator:
     def __init__(self):
         self._client = edgedb.create_client()  # type: ignore
 
-    def process_directory(self, directory: Path):
+    def process_directory(self, directory: Path, *, parallel: bool = False):
         print(f"Processing directory {directory}")
-        for file in directory.glob("**/*.edgeql"):
-            self.process_file(file)
+        if parallel:
+            with ThreadPoolExecutor() as executor:
+                for _ in executor.map(self.process_file, directory.glob("**/*.edgeql")):
+                    pass
+        else:
+            for file in directory.glob("**/*.edgeql"):
+                self.process_file(file)
 
     def process_file(self, file: Path):
         print(f"Processing {file}")
