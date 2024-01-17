@@ -1,84 +1,31 @@
-import os
-import re
-import subprocess
-from dataclasses import dataclass
-from dataclasses import field as dc_field
 from pathlib import Path
 
-import autoflake
 import edgedb
-import isort
 from edgedb import describe
 from edgedb.enums import Cardinality
 from jinja2 import Environment, FileSystemLoader
-from ruff.__main__ import find_ruff_bin
 
-TYPE_MAPPING = {
-    "std::str": "str",
-    "std::float32": "float",
-    "std::float64": "float",
-    "std::int16": "int",
-    "std::int32": "int",
-    "std::int64": "int",
-    "std::bigint": "int",
-    "std::bool": "bool",
-    "std::uuid": "UUID",
-    "std::bytes": "str",
-    "std::decimal": "Decimal",
-    "std::datetime": "datetime",
-    "std::duration": "timedelta",
-    "cal::local_date": "date",
-    "cal::local_time": "time",
-    "cal::local_datetime": "datetime",
-    "std::json": "Any",
-}
-
-
-@dataclass
-class EdgeQLEnum:
-    name: str
-    members: tuple[str]
-
-
-@dataclass
-class EdgeQLLiteral:
-    alias: str
-    values: tuple[str]
-
-
-@dataclass
-class EdgeQLModel:
-    name: str
-    fields: list["EdgeQLModelField"] = dc_field(default_factory=list)
-
-
-@dataclass
-class EdgeQLModelField:
-    name: str
-    type_str: str
-    optional: bool
-    alias: str | None
-
-
-@dataclass
-class EdgeQLArgument(EdgeQLModelField):
-    is_json: bool
-
-
-@dataclass
-class ProcessData:
-    query: str
-    literals: dict[str, EdgeQLLiteral] = dc_field(default_factory=dict)
-    enums: dict[str, EdgeQLEnum] = dc_field(default_factory=dict)
-    models: dict[str, EdgeQLModel] = dc_field(default_factory=dict)
-    args: dict[str, EdgeQLArgument] = dc_field(default_factory=dict)
-    optional_args: dict[str, EdgeQLArgument] = dc_field(default_factory=dict)
-    return_type: str = "None"
-    return_single: bool = True
+from edgedb_pydantic_codegen.models import (
+    TYPE_MAPPING,
+    EdgeQLArgument,
+    EdgeQLEnum,
+    EdgeQLLiteral,
+    EdgeQLModel,
+    EdgeQLModelField,
+    ProcessData,
+)
+from edgedb_pydantic_codegen.utils import (
+    camel_to_snake,
+    ruff_fix,
+    ruff_format,
+    snake_to_camel,
+)
 
 
 class Generator:
-    def __init__(self) -> None:
+    jinja_env = Environment(loader=FileSystemLoader(Path(__file__).parent))
+
+    def __init__(self):
         self._client = edgedb.create_client()  # type: ignore
 
     def process_directory(self, directory: Path):
@@ -91,13 +38,23 @@ class Generator:
         with file.open("r") as f:
             query = f.read()
 
+        generated = self.process_query(file.stem, query)
+
+        output_path = file.with_suffix(".py")
+        with output_path.open("w") as f:
+            f.write(generated)
+
+        ruff_fix(output_path)
+        ruff_format(output_path)
+
+    def process_query(self, filestem: str, query: str) -> str:
         process_data = ProcessData(query)
 
         describe_result = self._client._describe_query(query, inject_type_names=True)
 
         return_model = None
         if describe_result.output_type is not None:
-            return_model_name = snake_to_camel(file.stem) + "Result"
+            return_model_name = snake_to_camel(filestem) + "Result"
             return_model = self.parse_model(
                 return_model_name,
                 describe_result.output_type,  # type: ignore
@@ -127,7 +84,7 @@ class Generator:
                 type_str = self.parse_type(
                     name,
                     arg.type,
-                    snake_to_camel(file.stem),
+                    snake_to_camel(filestem),
                     process_data,
                     prefer_literal=True,
                 )
@@ -141,14 +98,10 @@ class Generator:
                         name, type_str, False, None, is_json
                     )
 
-        self.save(file, process_data)
-
-    def save(self, file: Path, process_data: ProcessData):
-        jinja_env = Environment(loader=FileSystemLoader(Path(__file__).parent))
-        template = jinja_env.get_template("template.py.jinja")
+        template = self.jinja_env.get_template("template.py.jinja")
 
         rendered = template.render(
-            stem=file.stem,
+            stem=filestem,
             query=process_data.query.strip(),
             literals=process_data.literals.values(),
             enums=process_data.enums.values(),
@@ -161,20 +114,7 @@ class Generator:
             return_single=process_data.return_single,
         )
 
-        imports_fixed = isort.code(
-            autoflake.fix_code(rendered, remove_all_unused_imports=True)
-        )
-
-        path = file.with_suffix(".py")
-        with path.open("w") as f:
-            f.write(imports_fixed)
-
-        ruff = find_ruff_bin()
-        completed_process = subprocess.run(
-            [os.fsdecode(ruff), "format", path.absolute()]
-        )
-        if completed_process.returncode != 0:
-            raise RuntimeError("Ruff failed to format the generated code")
+        return rendered
 
     @classmethod
     def parse_type(
@@ -274,12 +214,3 @@ class Generator:
         new_model.fields = list(fields.values())
 
         return new_model
-
-
-def snake_to_camel(snake_str: str) -> str:
-    components = snake_str.split("_")
-    return "".join(x.title() for x in components)
-
-
-def camel_to_snake(camel_str: str) -> str:
-    return re.sub("([A-Z])", "_\\1", camel_str).lower().lstrip("_")
