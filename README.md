@@ -1,22 +1,38 @@
 # edgedb-pydantic-codegen
 
-This library generates Python typesafe code for EdgeQL queries with [Pydantic](https://pydantic-docs.helpmanual.io/) parsed models.
+This tool generates Python typesafe async code for EdgeQL queries using [Pydantic V2](https://github.com/pydantic/pydantic).
+
+The generated models can be directly used with other libraries such as [FastAPI](https://github.com/tiangolo/fastapi).
+
+This is an alternative to the [built-in code generator](https://github.com/edgedb/edgedb-python/tree/master/edgedb/codegen) of the official [edgedb-python](https://github.com/edgedb/edgedb-python/tree/master) library.
 
 ## Install
 
+<p>
+  <a href="https://pypi.org/project/edgedb-pydantic-codegen" alt="Python version compatibility">
+    <img src="https://img.shields.io/pypi/pyversions/edgedb-pydantic-codegen.svg"/>
+  </a>
+  <a href="https://pypi.org/project/edgedb-pydantic-codegen" alt="PyPI version">
+    <img src="https://img.shields.io/pypi/v/edgedb-pydantic-codegen.svg"/>
+  </a>
+  <a href="https://calver.org" alt="Calendar Versioning scheme">
+    <img src="https://img.shields.io/badge/calver-YYYY.0M.MICRO-22bfda.svg"/>
+  </a>
+</p>
+
 ```sh
-pip install edgedb-pydantic-codegen
+pip3 install edgedb-pydantic-codegen
 ```
 
 ## Usage
 
-In an EdgeDB initialized project run
+In an EdgeDB initialized project, simply run
 
 ```sh
 edgedb-pydantic-codegen <directory>
 ```
 
-where `<directory>` contains your `*.edgeql` queries.
+All `*.edgeql` files in `<directory>` and its subdirectories will be processed and the generated code saved next to them.
 
 ## Generated code example
 
