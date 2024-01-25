@@ -42,7 +42,7 @@ class {{model.name}}(BaseModel):
     {{field.type_str}}
     {%- endif %}
     {%- if field.alias -%}
-    = Field(alias="{{field.alias}}")
+    = Field(validation_alias="{{field.alias}}")
     {%- endif %}
     {% endfor %}
 {% endfor %}
