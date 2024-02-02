@@ -16,7 +16,7 @@ edgedb = "^1.0.0"
 pydantic = "~2"
 orjson = "^3.8.0"
 jinja2 = "^3.1.2"
-ruff = "^0.1.2"
+ruff = "^0.2.0"
 
 [tool.poetry.group.dev.dependencies]
 pyright = "^1.1.333"
