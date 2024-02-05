@@ -85,6 +85,9 @@ class PlayerAddCoinsResult(BaseModel):
     user: PlayerAddCoinsResultUser
 
 
+adapter = TypeAdapter(PlayerAddCoinsResult | None)
+
+
 async def player_add_coins(
     executor: AsyncIOExecutor,
     *,
@@ -98,5 +101,5 @@ async def player_add_coins(
         moecoins=moecoins,
         blood_shards=blood_shards,
     )
-    return TypeAdapter(PlayerAddCoinsResult | None).validate_json(resp, strict=False)
+    return adapter.validate_json(resp, strict=False)
 ```
