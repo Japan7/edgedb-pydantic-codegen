@@ -47,6 +47,10 @@ class {{model.name}}(BaseModel):
     {% endfor %}
 {% endfor %}
 
+{%- if return_type != 'None' %}
+adapter = TypeAdapter({{return_type}})
+{% endif %}
+
 async def {{stem}} (
     executor: AsyncIOExecutor,
     {% if args | length > 0  %}
@@ -78,5 +82,5 @@ async def {{stem}} (
     {%- if return_type == 'None' %}
     assert resp == "null"
     {% else %}
-    return TypeAdapter({{return_type}}).validate_json(resp, strict=False)
+    return adapter.validate_json(resp, strict=False)
     {% endif %}
