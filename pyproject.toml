@@ -12,11 +12,13 @@ edgedb-pydantic-codegen = "edgedb_pydantic_codegen.__main__:cli"
 
 [tool.poetry.dependencies]
 python = "^3.11"
+# codegen
 edgedb = "^1.0.0"
-pydantic = "~2"
-orjson = "^3.8.0"
-jinja2 = "^3.1.2"
-ruff = "^0.2.0"
+jinja2 = "^3.0.0"
+ruff = ">=0.1.2,<1"
+# runtime
+pydantic = "^2.0.0"
+orjson = "^3.0.0"
 
 [tool.poetry.group.dev.dependencies]
 pyright = "^1.1.333"
