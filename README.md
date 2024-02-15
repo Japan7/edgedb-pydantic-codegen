@@ -10,14 +10,11 @@ This is an alternative to the [built-in code generator](https://github.com/edged
 
 <p>
   <a href="https://pypi.org/project/edgedb-pydantic-codegen" alt="Python version compatibility">
-    <img src="https://img.shields.io/pypi/pyversions/edgedb-pydantic-codegen.svg"/>
-  </a>
+    <img src="https://img.shields.io/pypi/pyversions/edgedb-pydantic-codegen" /></a>
   <a href="https://pypi.org/project/edgedb-pydantic-codegen" alt="PyPI version">
-    <img src="https://img.shields.io/pypi/v/edgedb-pydantic-codegen.svg"/>
-  </a>
+    <img src="https://img.shields.io/pypi/v/edgedb-pydantic-codegen" /></a>
   <a href="https://calver.org" alt="Calendar Versioning scheme">
-    <img src="https://img.shields.io/badge/calver-YYYY.0M.MICRO-22bfda.svg"/>
-  </a>
+    <img src="https://img.shields.io/badge/calver-YYYY.0M.MICRO-22bfda" /></a>
 </p>
 
 ```sh
