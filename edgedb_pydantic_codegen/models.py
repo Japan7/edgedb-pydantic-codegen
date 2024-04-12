@@ -35,6 +35,18 @@ class EdgeQLLiteral:
 
 
 @dataclass
+class EdgeQLNamedTuple:
+    name: str
+    fields: list["EdgeQLNamedTupleField"] = dc_field(default_factory=list)
+
+
+@dataclass
+class EdgeQLNamedTupleField:
+    name: str
+    type_str: str
+
+
+@dataclass
 class EdgeQLModel:
     name: str
     fields: list["EdgeQLModelField"] = dc_field(default_factory=list)
@@ -59,6 +71,7 @@ class ProcessData:
     literals: dict[str, EdgeQLLiteral] = dc_field(default_factory=dict)
     enums: dict[str, EdgeQLEnum] = dc_field(default_factory=dict)
     models: dict[str, EdgeQLModel] = dc_field(default_factory=dict)
+    namedtuples: dict[str, EdgeQLNamedTuple] = dc_field(default_factory=dict)
     args: dict[str, EdgeQLArgument] = dc_field(default_factory=dict)
     optional_args: dict[str, EdgeQLArgument] = dc_field(default_factory=dict)
     return_type: str = "None"

@@ -13,6 +13,8 @@ from edgedb_pydantic_codegen.models import (
     EdgeQLLiteral,
     EdgeQLModel,
     EdgeQLModelField,
+    EdgeQLNamedTuple,
+    EdgeQLNamedTupleField,
     ProcessData,
 )
 from edgedb_pydantic_codegen.utils import (
@@ -112,6 +114,7 @@ class Generator:
             literals=process_data.literals.values(),
             enums=process_data.enums.values(),
             models=process_data.models.values(),
+            namedtuples=process_data.namedtuples.values(),
             args=(
                 list(process_data.args.values())
                 + list(process_data.optional_args.values())
@@ -156,6 +159,13 @@ class Generator:
                 alias = (camel_to_snake(parent_model_name) + "_" + name).upper()
                 process_data.literals[alias] = EdgeQLLiteral(alias, type.members)
                 type_str = alias
+
+        elif isinstance(type, describe.NamedTupleType):
+            model_name = parent_model_name + snake_to_camel(name)
+            cls.parse_namedtuple(
+                model_name, type, process_data, prefer_literal=prefer_literal
+            )
+            type_str = model_name
 
         elif isinstance(type, describe.ObjectType):
             model_name = parent_model_name + snake_to_camel(name)
@@ -216,6 +226,33 @@ class Generator:
                 fields["id"].optional = False
             elif fields["id"].optional:
                 del fields["id"]
+
+        new_model.fields = list(fields.values())
+
+        return new_model
+
+    @classmethod
+    def parse_namedtuple(
+        cls,
+        model_name: str,
+        type: describe.NamedTupleType,
+        process_data: ProcessData,
+        prefer_literal: bool = False,
+    ) -> EdgeQLNamedTuple:
+        new_model = EdgeQLNamedTuple(model_name)
+        process_data.namedtuples[model_name] = new_model
+
+        fields: dict[str, EdgeQLNamedTupleField] = {}
+        for name, _type in type.element_types.items():
+            field_type = cls.parse_type(
+                name,
+                _type,
+                model_name,
+                process_data,
+                prefer_literal=prefer_literal,
+            )
+
+            fields[name] = EdgeQLNamedTupleField(name, field_type)
 
         new_model.fields = list(fields.values())
 
