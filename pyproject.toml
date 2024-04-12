@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "edgedb-pydantic-codegen"
-version = "2024.04.1-dev"
+version = "2024.04.2-dev"
 description = "Alternative Python EdgeDB code generator (Pydantic V2 + asyncio, FastAPI compatible)"
 authors = ["NextFire <git@yuru.moe>"]
 license = "MIT"
