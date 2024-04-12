@@ -8,7 +8,7 @@ from datetime import datetime
 from datetime import timedelta
 from datetime import date
 from datetime import time
-from typing import Any
+from typing import Any, NamedTuple
 
 from typing import Literal
 from enum import StrEnum
@@ -30,6 +30,13 @@ class {{enum.name}}(StrEnum):
     {%- for value in enum.members %}
     {{value}} = "{{value}}"
     {%- endfor %}
+{% endfor %}
+
+{% for ntuple in namedtuples | reverse %}
+class {{ntuple.name}}(NamedTuple):
+    {% for field in ntuple.fields -%}
+    {{field.name}}: {{field.type_str}}
+    {% endfor %}
 {% endfor %}
 
 {% for model in models | reverse %}
