@@ -148,36 +148,9 @@ class Generator:
             type_str = TYPE_MAPPING.get(type.name, "Any")
 
         elif isinstance(type, describe.EnumType):
-            if (
-                not prefer_literal and type.name is not None
-            ):  # an enum present in the schema
-                module, enum_name = type.name.split("::")
-                if module != "default":
-                    enum_name = module.title() + enum_name
-                else:
-                    enum_name = enum_name
-
-                members: dict[str, EdgeQLEnumMember] = {}
-                name_counts = defaultdict(int)
-                for member in type.members:
-                    name = escape(member)
-                    # handle duplicate names after escaping (e.g. "a-b" and "a b" -> "a_b" and "a_b1")
-                    name_counts[name] += 1
-                    if name_counts[name] > 1:
-                        name = f"{name}{name_counts[name]-1}"
-                    # handle invalid names (starting with a number)
-                    if not name.isidentifier():
-                        name = f"E{name}"
-                    members[name] = EdgeQLEnumMember(name, member)
-
-                process_data.enums[enum_name] = EdgeQLEnum(
-                    enum_name, list(members.values())
-                )
-                type_str = enum_name
-            else:  # use a literal
-                alias = (camel_to_snake(parent_model_name) + "_" + name).upper()
-                process_data.literals[alias] = EdgeQLLiteral(alias, type.members)
-                type_str = alias
+            type_str = cls.parse_enum(
+                name, type, parent_model_name, process_data, prefer_literal
+            )
 
         elif isinstance(type, describe.NamedTupleType):
             model_name = parent_model_name + snake_to_camel(name)
@@ -206,6 +179,47 @@ class Generator:
         # TODO: TupleType, RangeType, MultiRangeType
         if type_str is None:
             raise ValueError(f"Unknown type: {type}")
+
+        return type_str
+
+    @classmethod
+    def parse_enum(
+        cls,
+        name: str,
+        type: describe.EnumType,
+        parent_model_name: str,
+        process_data: ProcessData,
+        prefer_literal: bool = False,
+    ) -> str:
+        if not prefer_literal and type.name is not None:
+            module, enum_name = type.name.split("::")
+            if module != "default":
+                enum_name = module.title() + enum_name
+            else:
+                enum_name = enum_name
+
+            members: dict[str, EdgeQLEnumMember] = {}
+            name_counts = defaultdict(int)
+            for member in type.members:
+                name = escape(member)
+                # handle duplicate names after escaping (e.g. "a-b" and "a b" -> "a_b" and "a_b1")
+                name_counts[name] += 1
+                if name_counts[name] > 1:
+                    name = f"{name}{name_counts[name]-1}"
+                    # handle invalid names (starting with a number)
+                if not name.isidentifier():
+                    name = f"E{name}"
+                members[name] = EdgeQLEnumMember(name, member)
+
+            process_data.enums[enum_name] = EdgeQLEnum(
+                enum_name, list(members.values())
+            )
+            type_str = enum_name
+
+        else:  # use a literal
+            alias = (camel_to_snake(parent_model_name) + "_" + name).upper()
+            process_data.literals[alias] = EdgeQLLiteral(alias, type.members)
+            type_str = alias
 
         return type_str
 
