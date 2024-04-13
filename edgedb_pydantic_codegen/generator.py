@@ -60,13 +60,13 @@ class Generator:
 
         describe_result = self._client._describe_query(query, inject_type_names=True)
 
-        return_model = None
         if describe_result.output_type is not None:
-            return_model_name = snake_to_camel(filestem) + "Result"
-            return_model = self.parse_model(
-                return_model_name,
-                describe_result.output_type,  # type: ignore
+            return_type_str = self.parse_type(
+                "Result",
+                describe_result.output_type,
+                snake_to_camel(filestem),
                 process_data,
+                prefer_literal=False,
             )
 
             return_cardinality = describe_result.output_cardinality
@@ -74,16 +74,16 @@ class Generator:
                 process_data.return_type = "None"
                 process_data.return_single = True
             elif return_cardinality is Cardinality.AT_MOST_ONE:
-                process_data.return_type = f"{return_model.name} | None"
+                process_data.return_type = f"{return_type_str} | None"
                 process_data.return_single = True
             elif return_cardinality is Cardinality.ONE:
-                process_data.return_type = f"{return_model.name}"
+                process_data.return_type = f"{return_type_str}"
                 process_data.return_single = True
             elif return_cardinality is Cardinality.MANY:
-                process_data.return_type = f"list[{return_model.name}]"
+                process_data.return_type = f"list[{return_type_str}]"
                 process_data.return_single = False
             elif return_cardinality is Cardinality.AT_LEAST_ONE:
-                process_data.return_type = f"list[{return_model.name}]"
+                process_data.return_type = f"list[{return_type_str}]"
                 process_data.return_single = False
 
         if describe_result.input_type is not None:
