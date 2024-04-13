@@ -139,46 +139,52 @@ class Generator:
     ) -> str:
         type_str = None
 
-        if isinstance(type, describe.ScalarType):
-            assert type.base_type.name is not None
-            type_str = TYPE_MAPPING.get(type.base_type.name, "Any")
+        match type:
+            case describe.BaseScalarType(_, name=tname):
+                assert tname is not None
+                type_str = TYPE_MAPPING.get(tname, "Any")
 
-        elif isinstance(type, describe.BaseScalarType):
-            assert type.name is not None
-            type_str = TYPE_MAPPING.get(type.name, "Any")
+            case describe.ScalarType(_, _, base_type):
+                assert base_type.name is not None
+                type_str = TYPE_MAPPING.get(base_type.name, "Any")
 
-        elif isinstance(type, describe.EnumType):
-            type_str = cls.parse_enum(
-                name, type, parent_model_name, process_data, prefer_literal
-            )
+            case describe.EnumType():
+                type_str = cls.parse_enum(
+                    name, type, parent_model_name, process_data, prefer_literal
+                )
 
-        elif isinstance(type, describe.NamedTupleType):
-            model_name = parent_model_name + snake_to_camel(name)
-            cls.parse_namedtuple(
-                model_name, type, process_data, prefer_literal=prefer_literal
-            )
-            type_str = model_name
+            case describe.NamedTupleType():
+                model_name = parent_model_name + snake_to_camel(name)
+                cls.parse_namedtuple(
+                    model_name, type, process_data, prefer_literal=prefer_literal
+                )
+                type_str = model_name
 
-        elif isinstance(type, describe.ObjectType):
-            model_name = parent_model_name + snake_to_camel(name)
-            cls.parse_model(
-                model_name, type, process_data, prefer_literal=prefer_literal
-            )
-            type_str = model_name
+            case describe.ObjectType():
+                model_name = parent_model_name + snake_to_camel(name)
+                cls.parse_model(
+                    model_name, type, process_data, prefer_literal=prefer_literal
+                )
+                type_str = model_name
 
-        elif isinstance(type, describe.ArrayType):
-            element_type_str = cls.parse_type(
-                name,
-                type.element_type,
-                parent_model_name,
-                process_data,
-                prefer_literal=prefer_literal,
-            )
-            type_str = f"list[{element_type_str}]"
+            case describe.SequenceType():
+                element_type_str = cls.parse_type(
+                    name,
+                    type.element_type,
+                    parent_model_name,
+                    process_data,
+                    prefer_literal=prefer_literal,
+                )
+                match type:
+                    case describe.ArrayType():
+                        type_str = f"list[{element_type_str}]"
+                    case describe.SetType():
+                        type_str = f"set[{element_type_str}]"
+                    case _:
+                        type_str = f"Sequence[{element_type_str}]"
 
-        # TODO: TupleType, RangeType, MultiRangeType
-        if type_str is None:
-            raise ValueError(f"Unknown type: {type}")
+            case _:
+                raise ValueError(f"Unsupported type: {type}")
 
         return type_str
 
@@ -285,7 +291,6 @@ class Generator:
                 process_data,
                 prefer_literal=prefer_literal,
             )
-
             fields[name] = EdgeQLNamedTupleField(name, field_type)
 
         new_model.fields = list(fields.values())
