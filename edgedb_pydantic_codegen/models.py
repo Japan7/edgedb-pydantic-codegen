@@ -23,15 +23,21 @@ TYPE_MAPPING = {
 
 
 @dataclass
+class EdgeQLEnumMember:
+    name: str
+    value: str
+
+
+@dataclass
 class EdgeQLEnum:
     name: str
-    members: tuple[str]
+    members: list[EdgeQLEnumMember]
 
 
 @dataclass
 class EdgeQLLiteral:
     alias: str
-    values: tuple[str]
+    values: tuple[str, ...]
 
 
 @dataclass

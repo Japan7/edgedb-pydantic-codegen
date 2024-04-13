@@ -27,8 +27,8 @@ EDGEQL_QUERY = r"""
 
 {% for enum in enums %}
 class {{enum.name}}(StrEnum):
-    {%- for value in enum.members %}
-    {{value}} = "{{value}}"
+    {%- for member in enum.members %}
+    {{member.name}} = "{{member.value}}"
     {%- endfor %}
 {% endfor %}
 

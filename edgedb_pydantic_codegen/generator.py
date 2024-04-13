@@ -1,3 +1,4 @@
+from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
@@ -10,6 +11,7 @@ from edgedb_pydantic_codegen.models import (
     TYPE_MAPPING,
     EdgeQLArgument,
     EdgeQLEnum,
+    EdgeQLEnumMember,
     EdgeQLLiteral,
     EdgeQLModel,
     EdgeQLModelField,
@@ -19,6 +21,7 @@ from edgedb_pydantic_codegen.models import (
 )
 from edgedb_pydantic_codegen.utils import (
     camel_to_snake,
+    escape,
     ruff_fix,
     ruff_format,
     snake_to_camel,
@@ -153,7 +156,23 @@ class Generator:
                     enum_name = module.title() + enum_name
                 else:
                     enum_name = enum_name
-                process_data.enums[enum_name] = EdgeQLEnum(enum_name, type.members)
+
+                members: dict[str, EdgeQLEnumMember] = {}
+                name_counts = defaultdict(int)
+                for member in type.members:
+                    name = escape(member)
+                    # handle duplicate names after escaping (e.g. "a-b" and "a b" -> "a_b" and "a_b1")
+                    name_counts[name] += 1
+                    if name_counts[name] > 1:
+                        name = f"{name}{name_counts[name]-1}"
+                    # handle invalid names (starting with a number)
+                    if not name.isidentifier():
+                        name = f"E{name}"
+                    members[name] = EdgeQLEnumMember(name, member)
+
+                process_data.enums[enum_name] = EdgeQLEnum(
+                    enum_name, list(members.values())
+                )
                 type_str = enum_name
             else:  # use a literal
                 alias = (camel_to_snake(parent_model_name) + "_" + name).upper()
