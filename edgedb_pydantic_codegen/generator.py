@@ -183,7 +183,7 @@ class Generator:
                     case _:
                         type_str = f"Sequence[{element_type_str}]"
 
-            case _:
+            case _: # TODO: TupleType, RangeType, MultiRangeType
                 raise ValueError(f"Unsupported type: {type}")
 
         return type_str

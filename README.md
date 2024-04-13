@@ -100,3 +100,10 @@ async def player_add_coins(
     )
     return adapter.validate_json(resp, strict=False)
 ```
+
+## Caveats
+
+Currently this tool does not support:
+
+- `TupleType`, `RangeType` and `MultiRangeType` collections
+- `std::duration`, `cal::relative_duration`, `cal::date_duration`, `cfg::memory` and `ext::pgvector::vector` objects
