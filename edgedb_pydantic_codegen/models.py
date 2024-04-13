@@ -11,14 +11,18 @@ TYPE_MAPPING = {
     "std::bigint": "int",
     "std::bool": "bool",
     "std::uuid": "UUID",
-    "std::bytes": "str",
+    "std::bytes": "bytes",
     "std::decimal": "Decimal",
     "std::datetime": "datetime",
-    "std::duration": "timedelta",
+    # "std::duration": "timedelta",
+    "std::json": "Any",
     "cal::local_date": "date",
     "cal::local_time": "time",
     "cal::local_datetime": "datetime",
-    "std::json": "Any",
+    # "cal::relative_duration": "RelativeDuration",
+    # "cal::date_duration": "DateDuration",
+    # "cfg::memory": "ConfigMemory",
+    # "ext::pgvector::vector": "array",
 }
 
 

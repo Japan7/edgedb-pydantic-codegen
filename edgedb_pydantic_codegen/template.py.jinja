@@ -1,17 +1,12 @@
+from datetime import date, datetime, time
+from decimal import Decimal
+from enum import StrEnum
+from typing import Any, Literal
+from uuid import UUID
+
 import orjson
 from edgedb import AsyncIOExecutor
 from pydantic import BaseModel, Field, TypeAdapter
-
-from uuid import UUID
-from decimal import Decimal
-from datetime import datetime
-from datetime import timedelta
-from datetime import date
-from datetime import time
-from typing import Any, NamedTuple
-
-from typing import Literal
-from enum import StrEnum
 
 EDGEQL_QUERY = r"""
 {{query}}

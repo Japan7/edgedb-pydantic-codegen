@@ -203,6 +203,7 @@ class Generator:
             )
             type_str = f"list[{element_type_str}]"
 
+        # TODO: TupleType, RangeType, MultiRangeType
         if type_str is None:
             raise ValueError(f"Unknown type: {type}")
 
