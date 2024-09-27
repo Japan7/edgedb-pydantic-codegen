@@ -21,7 +21,7 @@ pydantic = "^2.0.0"
 orjson = "^3.0.0"
 
 [tool.poetry.group.dev.dependencies]
-pyright = "1.1.382.post0"
+pyright = "1.1.382.post1"
 
 [build-system]
 requires = ["poetry-core"]
