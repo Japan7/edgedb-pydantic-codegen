@@ -3,5 +3,6 @@
   "extends": [
     "github>Japan7/renovate-config",
     "github>Japan7/renovate-config:python"
-  ]
+  ],
+  "ignorePaths": [".python-version"]
 }
