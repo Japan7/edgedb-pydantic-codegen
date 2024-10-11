@@ -6,7 +6,7 @@ The generated models can be directly used with other libraries such as [FastAPI]
 
 This is an alternative to the [built-in code generator](https://github.com/edgedb/edgedb-python/tree/master/edgedb/codegen) of the official [edgedb-python](https://github.com/edgedb/edgedb-python/tree/master) library.
 
-## Install
+## Usage
 
 <p>
   <a href="https://pypi.org/project/edgedb-pydantic-codegen" alt="Python version compatibility">
@@ -17,16 +17,10 @@ This is an alternative to the [built-in code generator](https://github.com/edged
     <img src="https://img.shields.io/badge/calver-YYYY.0M.MICRO-22bfda" /></a>
 </p>
 
-```sh
-pip3 install edgedb-pydantic-codegen
-```
-
-## Usage
-
 In an EdgeDB initialized project, simply run
 
 ```sh
-edgedb-pydantic-codegen <directory>
+uvx edgedb-pydantic-codegen <directory>
 ```
 
 All `*.edgeql` files in `<directory>` and its subdirectories will be processed and the generated code saved next to them.

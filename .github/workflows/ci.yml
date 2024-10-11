@@ -14,21 +14,11 @@ jobs:
     if: startsWith(github.ref, 'refs/tags/') != true
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/cache@v4
+      - uses: astral-sh/setup-uv@v3
         with:
-          path: ~/.cache/pypoetry
-          key: ${{ runner.os }}-poetry-${{ hashFiles('**/pyproject.toml', '**/poetry.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-poetry-
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-      - name: poetry install
-        run: |
-          pip install poetry
-          poetry install
-      - run: poetry run pyright
-      - run: poetry run ruff check edgedb_pydantic_codegen/
+          enable-cache: true
+      - run: uv run --frozen pyright
+      - run: uv run --frozen ruff check
         if: always()
 
   release:
@@ -38,14 +28,13 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - uses: actions/setup-python@v5
+      - uses: astral-sh/setup-uv@v3
         with:
-          python-version: "3.11"
-      - run: |
-          pip install poetry
-          poetry publish --build
+          enable-cache: true
+      - run: uv build
+      - run: uv publish
         env:
-          POETRY_PYPI_TOKEN_PYPI: ${{ secrets.POETRY_PYPI_TOKEN_PYPI }}
+          UV_PUBLISH_USERNAME: ${{ secrets.POETRY_PYPI_TOKEN_PYPI }}
       - run: |
           gh release create ${{ github.ref_name }} dist/* \
           --generate-notes \
