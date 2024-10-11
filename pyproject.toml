@@ -4,7 +4,7 @@ version = "2024.10.1-dev"
 description = "Alternative Python EdgeDB code generator (Pydantic V2 + asyncio, FastAPI compatible)"
 readme = "README.md"
 license = { file = "LICENSE" }
-requires-python = ">=3.11,<4"
+requires-python = ">=3.11,<3.13"
 dependencies = [
     # codegen
     "edgedb>=1,<3",
