@@ -3,7 +3,7 @@ name = "edgedb-pydantic-codegen"
 version = "2024.10.1-dev"
 description = "Alternative Python EdgeDB code generator (Pydantic V2 + asyncio, FastAPI compatible)"
 readme = "README.md"
-license = "MIT"
+license = { file = "LICENSE" }
 requires-python = ">=3.11,<4"
 dependencies = [
     # codegen
@@ -26,6 +26,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [tool.pyright]
+pythonVersion = "3.11"
 reportDeprecated = true
 
 [tool.ruff.lint]
