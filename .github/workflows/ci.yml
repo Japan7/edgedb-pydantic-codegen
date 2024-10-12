@@ -33,8 +33,6 @@ jobs:
           enable-cache: true
       - run: uv build
       - run: uv publish
-        env:
-          UV_PUBLISH_USERNAME: ${{ secrets.POETRY_PYPI_TOKEN_PYPI }}
       - run: |
           gh release create ${{ github.ref_name }} dist/* \
           --generate-notes \
