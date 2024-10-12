@@ -1,8 +1,6 @@
 name: Calendar Versioning
 
 on:
-  schedule:
-    - cron: "30 23 * * 5"
   workflow_dispatch:
 
 permissions:
