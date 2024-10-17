@@ -1,9 +1,9 @@
 [project]
 name = "edgedb-pydantic-codegen"
-version = "2024.10.6-dev"
+dynamic = ["version"]
 description = "Alternative Python EdgeDB code generator (Pydantic V2 + asyncio, FastAPI compatible)"
 readme = "README.md"
-license = { file = "LICENSE" }
+license = "MIT"
 authors = [{ name = "NextFire", email = "git@yuru.moe" }]
 requires-python = ">=3.11"
 dependencies = [
@@ -23,11 +23,14 @@ dev-dependencies = ["pyright==1.1.385"]
 edgedb-pydantic-codegen = "edgedb_pydantic_codegen.__main__:cli"
 
 [project.urls]
-Homepage = "https://github.com/Japan7/edgedb-pydantic-codegen"
+homepage = "https://github.com/Japan7/edgedb-pydantic-codegen"
 
 [build-system]
-requires = ["hatchling"]
+requires = ["hatchling", "hatch-vcs"]
 build-backend = "hatchling.build"
+
+[tool.hatch.version]
+source = "vcs"
 
 [tool.pyright]
 pythonVersion = "3.11"
