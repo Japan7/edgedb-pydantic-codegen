@@ -7,7 +7,7 @@ from uuid import UUID
 
 import orjson
 from edgedb import AsyncIOExecutor
-from pydantic import BaseModel, Field, TypeAdapter
+from pydantic import BaseModel, ConfigDict, Field, TypeAdapter
 
 EDGEQL_QUERY = r"""
 {{query}}
@@ -37,6 +37,9 @@ class {{ntuple.name}}(NamedTuple):
 
 {% for model in models | reverse %}
 class {{model.name}}(BaseModel):
+    {% if model.has_aliased_fields -%}
+    model_config = ConfigDict(populate_by_name=True)
+    {%- endif %}
     {% for field in model.fields -%}
     {{field.name}}:
     {%- if field.optional -%}

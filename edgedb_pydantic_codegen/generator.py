@@ -183,7 +183,7 @@ class Generator:
                     case _:
                         type_str = f"Sequence[{element_type_str}]"
 
-            case _: # TODO: TupleType, RangeType, MultiRangeType
+            case _:  # TODO: TupleType, RangeType, MultiRangeType
                 raise ValueError(f"Unsupported type: {type}")
 
         return type_str
@@ -268,6 +268,7 @@ class Generator:
                 del fields["id"]
 
         new_model.fields = list(fields.values())
+        new_model.has_aliased_fields = any(f.alias for f in new_model.fields)
 
         return new_model
 

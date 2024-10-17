@@ -60,6 +60,7 @@ class EdgeQLNamedTupleField:
 class EdgeQLModel:
     name: str
     fields: list["EdgeQLModelField"] = dc_field(default_factory=list)
+    has_aliased_fields: bool = False
 
 
 @dataclass
