@@ -46,7 +46,7 @@ wheels = [
 
 [[package]]
 name = "edgedb-pydantic-codegen"
-version = "2024.10.6"
+version = "2024.10.7.dev1+g0197433"
 source = { editable = "." }
 dependencies = [
     { name = "edgedb" },
