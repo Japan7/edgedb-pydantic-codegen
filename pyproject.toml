@@ -16,8 +16,8 @@ dependencies = [
     "orjson>=3,<4",
 ]
 
-[tool.uv]
-dev-dependencies = ["pyright==1.1.386"]
+[dependency-groups]
+dev = ["pyright==1.1.386"]
 
 [project.scripts]
 edgedb-pydantic-codegen = "edgedb_pydantic_codegen.__main__:cli"
