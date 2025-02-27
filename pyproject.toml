@@ -17,7 +17,7 @@ dependencies = [
 ]
 
 [dependency-groups]
-dev = ["pyright==1.1.394"]
+dev = ["pyright==1.1.395"]
 
 [project.scripts]
 edgedb-pydantic-codegen = "edgedb_pydantic_codegen.__main__:cli"
