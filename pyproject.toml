@@ -8,7 +8,7 @@ authors = [{ name = "NextFire", email = "git@yuru.moe" }]
 requires-python = ">=3.11"
 dependencies = [
     # codegen
-    "edgedb>=1,<3",
+    "gel>=3,<4",
     "jinja2>=3,<4",
     "ruff>=0.1.2,<1",
     # runtime

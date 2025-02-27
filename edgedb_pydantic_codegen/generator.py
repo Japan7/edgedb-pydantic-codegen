@@ -2,9 +2,9 @@ from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
-import edgedb
-from edgedb import describe
-from edgedb.enums import Cardinality
+import gel
+from gel import describe
+from gel.enums import Cardinality
 from jinja2 import Environment, FileSystemLoader
 
 from edgedb_pydantic_codegen.models import (
@@ -32,7 +32,7 @@ class Generator:
     jinja_env = Environment(loader=FileSystemLoader(Path(__file__).parent))
 
     def __init__(self):
-        self._client = edgedb.create_client()  # type: ignore
+        self._client = gel.create_client()  # type: ignore
 
     def process_directory(self, directory: Path, *, parallel: bool = False):
         print(f"Processing directory {directory}")
@@ -211,7 +211,7 @@ class Generator:
                 # handle duplicate names after escaping (e.g. "a-b" and "a b" -> "a_b" and "a_b1")
                 name_counts[name] += 1
                 if name_counts[name] > 1:
-                    name = f"{name}{name_counts[name]-1}"
+                    name = f"{name}{name_counts[name] - 1}"
                     # handle invalid names (starting with a number)
                 if not name.isidentifier():
                     name = f"E{name}"
