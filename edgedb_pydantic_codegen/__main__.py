@@ -1,17 +1,10 @@
 import argparse
-import warnings
 from pathlib import Path
 
 from edgedb_pydantic_codegen.generator import Generator
 
 
 def cli():
-    warnings.simplefilter("default")
-    warnings.warn(
-        "If you have migrated to `gel`, please use `gel-pydantic-codegen` instead. "
-        "The `edgedb-pydantic-codegen` package is deprecated and is no longer maintained.",
-        DeprecationWarning,
-    )
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "directory",
