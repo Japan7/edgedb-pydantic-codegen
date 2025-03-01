@@ -6,6 +6,8 @@ The generated models can be directly used with other libraries such as [FastAPI]
 
 This is an alternative to the [built-in code generator](https://github.com/geldata/gel-python/tree/master/gel/codegen) of the official [gel-python](https://github.com/geldata/gel-python/tree/master) library.
 
+**For legacy EdgeDB <v6 support**, check the last [`edgedb-pydantic-codegen` release](https://github.com/Japan7/gel-pydantic-codegen/releases/tag/2025.03.01) and [its PyPI page](https://pypi.org/project/edgedb-pydantic-codegen/).
+
 ## Usage
 
 <p>
