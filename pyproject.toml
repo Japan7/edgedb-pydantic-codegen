@@ -1,7 +1,7 @@
 [project]
-name = "edgedb-pydantic-codegen"
+name = "gel-pydantic-codegen"
 dynamic = ["version"]
-description = "Alternative Python EdgeDB code generator (Pydantic V2 + asyncio, FastAPI compatible)"
+description = "Alternative Python Gel code generator (Pydantic V2 + asyncio, FastAPI compatible)"
 readme = "README.md"
 license = "MIT"
 authors = [{ name = "NextFire", email = "git@yuru.moe" }]
@@ -20,10 +20,10 @@ dependencies = [
 dev = ["pyright==1.1.395"]
 
 [project.scripts]
-edgedb-pydantic-codegen = "edgedb_pydantic_codegen.__main__:cli"
+gel-pydantic-codegen = "gel_pydantic_codegen.__main__:cli"
 
 [project.urls]
-homepage = "https://github.com/Japan7/edgedb-pydantic-codegen"
+homepage = "https://github.com/Japan7/gel-pydantic-codegen"
 
 [build-system]
 requires = ["hatchling", "hatch-vcs"]

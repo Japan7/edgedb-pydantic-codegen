@@ -1,7 +1,7 @@
 import argparse
 from pathlib import Path
 
-from edgedb_pydantic_codegen.generator import Generator
+from gel_pydantic_codegen.generator import Generator
 
 
 def cli():

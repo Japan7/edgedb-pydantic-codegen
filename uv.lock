@@ -21,7 +21,33 @@ wheels = [
 ]
 
 [[package]]
-name = "edgedb-pydantic-codegen"
+name = "gel"
+version = "3.0.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "certifi", marker = "sys_platform == 'win32'" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/a4/b5/d653f4543ea717340fa27ed6a0b8ecb6c6a8b9d7330aa80f81a807e91025/gel-3.0.0.tar.gz", hash = "sha256:53da5f05e5048aa589a392ff3090ce9907c0143182b388e75a38c3f67d91128c", size = 1316200 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/83/04/61c809590d209c7c1388a4dadcc0cfc9a395d02a6424757b08140c63eb38/gel-3.0.0-cp311-cp311-macosx_10_9_x86_64.whl", hash = "sha256:a2b3a0ef9f7e2b8faaa9e5fc497fca4fc6812ec413523c1634ba16f37ce3afd0", size = 2129439 },
+    { url = "https://files.pythonhosted.org/packages/3d/ef/f8be617831cd481f13915d58dc230505f9192d722aef7f5dab04d6c9cfe4/gel-3.0.0-cp311-cp311-macosx_11_0_arm64.whl", hash = "sha256:83549b209375b469b09ab3a6dd2a725c67bc8bfa9efcff0092574028cc29fc98", size = 2094108 },
+    { url = "https://files.pythonhosted.org/packages/95/9c/28f4e6c14e280b26de7cd536d2cd906155c04058d8d66a153ea0cdbd224a/gel-3.0.0-cp311-cp311-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:a66fda0f002b455073df0677522d328e84186e5e6416c7da38a869c115579238", size = 5337434 },
+    { url = "https://files.pythonhosted.org/packages/6b/09/bde4ae653d39a935d6e665c0fc36660c6cfd9871bdcf0d1669b6b2e6ee1b/gel-3.0.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:11d931aeff1aaa3a38f15e700874c0206d21443cc96040f5300bd6f783eb196b", size = 5383393 },
+    { url = "https://files.pythonhosted.org/packages/1b/bb/b911ff3d544ed8e38d61b7e772b630e936b8e396b7cd386a5d63ea3fa779/gel-3.0.0-cp311-cp311-win_amd64.whl", hash = "sha256:77009857265fe63ba41d8a4e6fe75fadc9e781a785d46e62c6de7305403b6143", size = 2062563 },
+    { url = "https://files.pythonhosted.org/packages/c8/c4/a5c94aa161e68dcff28f6aade1326a0bf4e0c405ea206d8073f71c91f68a/gel-3.0.0-cp312-cp312-macosx_10_13_x86_64.whl", hash = "sha256:72d286bb601ac528c90531b02c60cecdb1d5bad7937b5445b7bbe913fce55afa", size = 2128532 },
+    { url = "https://files.pythonhosted.org/packages/fb/b2/7af93281d94884495144e65b66bb1c3a416a4b0dcc1c477f513fc733b5ed/gel-3.0.0-cp312-cp312-macosx_11_0_arm64.whl", hash = "sha256:9463f4138bb3941d3f3430f8dbb6cfeeccfde039ac98c7708e20aa8a3098bf67", size = 2084985 },
+    { url = "https://files.pythonhosted.org/packages/1d/51/7d88688071f67f90b49de1ab928d4bcc259af6a75a8dbe6fb5c1c686d833/gel-3.0.0-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:eff95bf19ca747a1c7debcad7d7623a7549c7d75153c7a7418576e08012952a3", size = 5793825 },
+    { url = "https://files.pythonhosted.org/packages/0e/06/d6d24474359cc4c76683d22919c798780a7bd20a38e1fdb7a6a175531c6a/gel-3.0.0-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:43ee7491c68bd39d8191bd63506606fd9f74138e4d472f21df6fa1fb045cf2cc", size = 5906728 },
+    { url = "https://files.pythonhosted.org/packages/06/5c/8b6ebf6e84c15d6456829a6538a4cb678a697a451ee11e642ae84ca8e9a4/gel-3.0.0-cp312-cp312-win_amd64.whl", hash = "sha256:03b44d173ef0ae1116a0447eef88e22c6b21a0b407d47e4b5d38ac81f4c5e67f", size = 2049697 },
+    { url = "https://files.pythonhosted.org/packages/ed/3b/8057113d8cec8dda9ca292b36072ad629aed0a3625b65d0d38b39571e5f5/gel-3.0.0-cp313-cp313-macosx_10_13_x86_64.whl", hash = "sha256:3f47a2eb02c573f7d2a35be2b6527a7f2b04c6a379a37dcbf4e9daf857f5f01e", size = 2121843 },
+    { url = "https://files.pythonhosted.org/packages/5a/02/57affe5454c5cfe8bc1444d5dc1620d4c99ab45abde7e411d8b248d526da/gel-3.0.0-cp313-cp313-macosx_11_0_arm64.whl", hash = "sha256:f9ff4621a1fe7a5c6470d8ac427bce011b44afda5ecae991eb19c85bb8197385", size = 2078392 },
+    { url = "https://files.pythonhosted.org/packages/cf/f7/76dda7ffeaf3092e9aa41f2ae7566e5f54e8272274d28b3b54e809c6fabf/gel-3.0.0-cp313-cp313-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:71512a7bbc1295cef590ea8f4eeb8d12168b349f58a9481a1765275474228e33", size = 5780173 },
+    { url = "https://files.pythonhosted.org/packages/22/f0/db0dc0321e07dcec5404c2a10f0cbd82ee6ad8bb72bf776ec8293da3da92/gel-3.0.0-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:b82c2d178b244852ea417d52d4df99282c35fddc64088bf2b9dfaf9e3746c183", size = 5886477 },
+    { url = "https://files.pythonhosted.org/packages/6b/8f/45f3bb7d0ca534bf22959ecd63e8853986afb64ddae3eb5a4fe7b4a1ef1c/gel-3.0.0-cp313-cp313-win_amd64.whl", hash = "sha256:97fcfd07dc42094d0c2eac09413cd55589703fbbf5b3f78263d770ebf6b0ed0e", size = 2048336 },
+]
+
+[[package]]
+name = "gel-pydantic-codegen"
 source = { editable = "." }
 dependencies = [
     { name = "gel" },
@@ -47,32 +73,6 @@ requires-dist = [
 
 [package.metadata.requires-dev]
 dev = [{ name = "pyright", specifier = "==1.1.395" }]
-
-[[package]]
-name = "gel"
-version = "3.0.0"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "certifi", marker = "sys_platform == 'win32'" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/a4/b5/d653f4543ea717340fa27ed6a0b8ecb6c6a8b9d7330aa80f81a807e91025/gel-3.0.0.tar.gz", hash = "sha256:53da5f05e5048aa589a392ff3090ce9907c0143182b388e75a38c3f67d91128c", size = 1316200 }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/83/04/61c809590d209c7c1388a4dadcc0cfc9a395d02a6424757b08140c63eb38/gel-3.0.0-cp311-cp311-macosx_10_9_x86_64.whl", hash = "sha256:a2b3a0ef9f7e2b8faaa9e5fc497fca4fc6812ec413523c1634ba16f37ce3afd0", size = 2129439 },
-    { url = "https://files.pythonhosted.org/packages/3d/ef/f8be617831cd481f13915d58dc230505f9192d722aef7f5dab04d6c9cfe4/gel-3.0.0-cp311-cp311-macosx_11_0_arm64.whl", hash = "sha256:83549b209375b469b09ab3a6dd2a725c67bc8bfa9efcff0092574028cc29fc98", size = 2094108 },
-    { url = "https://files.pythonhosted.org/packages/95/9c/28f4e6c14e280b26de7cd536d2cd906155c04058d8d66a153ea0cdbd224a/gel-3.0.0-cp311-cp311-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:a66fda0f002b455073df0677522d328e84186e5e6416c7da38a869c115579238", size = 5337434 },
-    { url = "https://files.pythonhosted.org/packages/6b/09/bde4ae653d39a935d6e665c0fc36660c6cfd9871bdcf0d1669b6b2e6ee1b/gel-3.0.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:11d931aeff1aaa3a38f15e700874c0206d21443cc96040f5300bd6f783eb196b", size = 5383393 },
-    { url = "https://files.pythonhosted.org/packages/1b/bb/b911ff3d544ed8e38d61b7e772b630e936b8e396b7cd386a5d63ea3fa779/gel-3.0.0-cp311-cp311-win_amd64.whl", hash = "sha256:77009857265fe63ba41d8a4e6fe75fadc9e781a785d46e62c6de7305403b6143", size = 2062563 },
-    { url = "https://files.pythonhosted.org/packages/c8/c4/a5c94aa161e68dcff28f6aade1326a0bf4e0c405ea206d8073f71c91f68a/gel-3.0.0-cp312-cp312-macosx_10_13_x86_64.whl", hash = "sha256:72d286bb601ac528c90531b02c60cecdb1d5bad7937b5445b7bbe913fce55afa", size = 2128532 },
-    { url = "https://files.pythonhosted.org/packages/fb/b2/7af93281d94884495144e65b66bb1c3a416a4b0dcc1c477f513fc733b5ed/gel-3.0.0-cp312-cp312-macosx_11_0_arm64.whl", hash = "sha256:9463f4138bb3941d3f3430f8dbb6cfeeccfde039ac98c7708e20aa8a3098bf67", size = 2084985 },
-    { url = "https://files.pythonhosted.org/packages/1d/51/7d88688071f67f90b49de1ab928d4bcc259af6a75a8dbe6fb5c1c686d833/gel-3.0.0-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:eff95bf19ca747a1c7debcad7d7623a7549c7d75153c7a7418576e08012952a3", size = 5793825 },
-    { url = "https://files.pythonhosted.org/packages/0e/06/d6d24474359cc4c76683d22919c798780a7bd20a38e1fdb7a6a175531c6a/gel-3.0.0-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:43ee7491c68bd39d8191bd63506606fd9f74138e4d472f21df6fa1fb045cf2cc", size = 5906728 },
-    { url = "https://files.pythonhosted.org/packages/06/5c/8b6ebf6e84c15d6456829a6538a4cb678a697a451ee11e642ae84ca8e9a4/gel-3.0.0-cp312-cp312-win_amd64.whl", hash = "sha256:03b44d173ef0ae1116a0447eef88e22c6b21a0b407d47e4b5d38ac81f4c5e67f", size = 2049697 },
-    { url = "https://files.pythonhosted.org/packages/ed/3b/8057113d8cec8dda9ca292b36072ad629aed0a3625b65d0d38b39571e5f5/gel-3.0.0-cp313-cp313-macosx_10_13_x86_64.whl", hash = "sha256:3f47a2eb02c573f7d2a35be2b6527a7f2b04c6a379a37dcbf4e9daf857f5f01e", size = 2121843 },
-    { url = "https://files.pythonhosted.org/packages/5a/02/57affe5454c5cfe8bc1444d5dc1620d4c99ab45abde7e411d8b248d526da/gel-3.0.0-cp313-cp313-macosx_11_0_arm64.whl", hash = "sha256:f9ff4621a1fe7a5c6470d8ac427bce011b44afda5ecae991eb19c85bb8197385", size = 2078392 },
-    { url = "https://files.pythonhosted.org/packages/cf/f7/76dda7ffeaf3092e9aa41f2ae7566e5f54e8272274d28b3b54e809c6fabf/gel-3.0.0-cp313-cp313-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:71512a7bbc1295cef590ea8f4eeb8d12168b349f58a9481a1765275474228e33", size = 5780173 },
-    { url = "https://files.pythonhosted.org/packages/22/f0/db0dc0321e07dcec5404c2a10f0cbd82ee6ad8bb72bf776ec8293da3da92/gel-3.0.0-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:b82c2d178b244852ea417d52d4df99282c35fddc64088bf2b9dfaf9e3746c183", size = 5886477 },
-    { url = "https://files.pythonhosted.org/packages/6b/8f/45f3bb7d0ca534bf22959ecd63e8853986afb64ddae3eb5a4fe7b4a1ef1c/gel-3.0.0-cp313-cp313-win_amd64.whl", hash = "sha256:97fcfd07dc42094d0c2eac09413cd55589703fbbf5b3f78263d770ebf6b0ed0e", size = 2048336 },
-]
 
 [[package]]
 name = "jinja2"

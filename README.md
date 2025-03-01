@@ -1,26 +1,26 @@
-# edgedb-pydantic-codegen
+# gel-pydantic-codegen
 
 This tool generates Python typesafe async code for EdgeQL queries using [Pydantic V2](https://github.com/pydantic/pydantic).
 
 The generated models can be directly used with other libraries such as [FastAPI](https://github.com/tiangolo/fastapi).
 
-This is an alternative to the [built-in code generator](https://github.com/edgedb/edgedb-python/tree/master/edgedb/codegen) of the official [edgedb-python](https://github.com/edgedb/edgedb-python/tree/master) library.
+This is an alternative to the [built-in code generator](https://github.com/geldata/gel-python/tree/master/gel/codegen) of the official [gel-python](https://github.com/geldata/gel-python/tree/master) library.
 
 ## Usage
 
 <p>
-  <a href="https://pypi.org/project/edgedb-pydantic-codegen" alt="Python version compatibility">
-    <img src="https://img.shields.io/pypi/pyversions/edgedb-pydantic-codegen" /></a>
-  <a href="https://pypi.org/project/edgedb-pydantic-codegen" alt="PyPI version">
-    <img src="https://img.shields.io/pypi/v/edgedb-pydantic-codegen" /></a>
+  <a href="https://pypi.org/project/gel-pydantic-codegen" alt="Python version compatibility">
+    <img src="https://img.shields.io/pypi/pyversions/gel-pydantic-codegen" /></a>
+  <a href="https://pypi.org/project/gel-pydantic-codegen" alt="PyPI version">
+    <img src="https://img.shields.io/pypi/v/gel-pydantic-codegen" /></a>
   <a href="https://calver.org" alt="Calendar Versioning scheme">
     <img src="https://img.shields.io/badge/calver-YYYY.0M.MICRO-22bfda" /></a>
 </p>
 
-In an EdgeDB initialized project, simply run
+In an Gel initialized project, simply run
 
 ```sh
-uvx edgedb-pydantic-codegen <directory>
+uvx gel-pydantic-codegen <directory>
 ```
 
 All `*.edgeql` files in `<directory>` and its subdirectories will be processed and the generated code saved next to them.

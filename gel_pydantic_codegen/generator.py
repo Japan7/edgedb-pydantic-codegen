@@ -7,7 +7,7 @@ from gel import describe
 from gel.enums import Cardinality
 from jinja2 import Environment, FileSystemLoader
 
-from edgedb_pydantic_codegen.models import (
+from gel_pydantic_codegen.models import (
     TYPE_MAPPING,
     EdgeQLArgument,
     EdgeQLEnum,
@@ -19,7 +19,7 @@ from edgedb_pydantic_codegen.models import (
     EdgeQLNamedTupleField,
     ProcessData,
 )
-from edgedb_pydantic_codegen.utils import (
+from gel_pydantic_codegen.utils import (
     camel_to_snake,
     escape,
     ruff_fix,
